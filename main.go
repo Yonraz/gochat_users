@@ -13,6 +13,8 @@ import (
 )
 
 func init () {
+	time.Sleep(15 * time.Second)
+	fmt.Println("Application starting...")
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDb()
 	initializers.SyncDatabase()
@@ -20,8 +22,6 @@ func init () {
 }
 
 func main() {
-	time.Sleep(15 * time.Second)
-	fmt.Println("Application starting...")
 	router := gin.Default()
 
 	defer func() {
