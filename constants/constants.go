@@ -3,6 +3,7 @@ package constants
 type Queues string
 type RoutingKey string
 type Exchange string
+type UserStatus string
 
 const (
 	UserEventsExchange Exchange = "UserEventsExchange"
@@ -18,4 +19,9 @@ const (
 	UserRegistrationQueue Queues = "UserRegistrationQueue"
 	UserLoginQueue        Queues = "UserLoginQueue"
 	UserSignoutQueue      Queues = "UserSignoutQueue"
+)
+
+const (
+	Online  UserStatus = "online"
+	Offline UserStatus = "offline"
 )
