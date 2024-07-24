@@ -1,19 +1,24 @@
 package controllers
 
 import (
-	"fmt"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/yonraz/gochat_users/initializers"
 	"github.com/yonraz/gochat_users/models"
 )
 
-func Signup(username string) error {
-	user := models.User{Username: username}
-
-	result := initializers.DB.Create(&user)
-	if result.Error != nil {
-		return fmt.Errorf("could not create a new user: %v", result.Error)
+func GetUsers(ctx *gin.Context) {
+	var users []models.User
+	if err := initializers.DB.Find(&users).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to fetch users",
+            "details": err.Error(),
+		})
+		return
 	}
-	fmt.Printf("saved user %v to database!", username)
-	return nil
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"users": users,
+	})
 }

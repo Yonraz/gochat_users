@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/streadway/amqp"
-	"github.com/yonraz/gochat_users/controllers"
+	"github.com/yonraz/gochat_users/models"
+	"github.com/yonraz/gochat_users/services"
 )
 
 func UserRegisteredHandler(msg amqp.Delivery) error {
@@ -18,7 +19,8 @@ func UserRegisteredHandler(msg amqp.Delivery) error {
 	if !ok {
 		return fmt.Errorf("username field is missing in the message")
 	}
-	if err := controllers.Signup(username); err != nil {
+	user := models.User{Username: username}
+	if err := services.Create(user); err != nil {
 		return err
 	}
 	fmt.Printf("User Registered: %s\n", username)

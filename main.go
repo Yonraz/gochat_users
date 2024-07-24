@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/streadway/amqp"
+	"github.com/yonraz/gochat_users/controllers"
 	"github.com/yonraz/gochat_users/events/consumers"
 	"github.com/yonraz/gochat_users/initializers"
 )
@@ -35,6 +36,8 @@ func main() {
 	}()
 
 	go startConsumers()
+
+	router.GET("/api/users", controllers.GetUsers)
 
 	router.Run()
 }
