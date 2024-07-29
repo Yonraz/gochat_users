@@ -9,8 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/yonraz/gochat_users/initializers"
-	"github.com/yonraz/gochat_users/models"
 )
 
 func RequireAuth(ctx *gin.Context) {
@@ -60,12 +58,6 @@ func validateToken(tokenString string, ctx *gin.Context) (error) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			return errors.New("token is expired")
 		}
-		var user models.User
-		initializers.DB.First(&user, claims["sub"])
-		if user.ID == 0 {
-			return errors.New("unauthorized")
-		}
-		ctx.Set("currentUser", user.Username)
 	}
 
 	if err != nil {
