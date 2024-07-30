@@ -43,6 +43,8 @@ This service is responsible for managing user information, including storing use
 
 ## Installation
 
+_*This project is part of a super-module (gochat-app), it's intended to run as a microservice on a k8s cluster. these instructions are for local installation._
+
 1. **Clone the repository:**
 
    ```bash
