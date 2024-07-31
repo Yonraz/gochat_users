@@ -55,15 +55,16 @@ func (controller *UsersController) GetUsers(ctx *gin.Context) {
 	}
 	query := sort + direction
 	var users []models.User
-	if !state.DbCacheState.WasDBChanged() {
+	if state.DbCacheState.WasDBChanged() {
 		result, err := controller.cacheInstance.GetQuery(query)
 		if err == nil && result != nil {
 			ctx.JSON(http.StatusOK, gin.H{
 			"users": result,
 			})
 			log.Println(query + " query hit")
+		} else {
+			log.Println(query + " query miss")
 		}
-		log.Println(query + " query miss")
 	}
 
 	if err := initializers.DB.Order(sort + " " + direction).Find(&users).Error; err != nil {
