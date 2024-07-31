@@ -22,7 +22,7 @@ var validDirections = map[string]bool{
     "desc": true,
 }
 
-var PAGE_SIZE = 20
+var PAGE_SIZE = 10
 
 type UsersController struct {
 	cacheInstance *cache.Redis
