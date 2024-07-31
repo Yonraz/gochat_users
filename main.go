@@ -19,6 +19,7 @@ func init () {
 	initializers.ConnectToDb()
 	initializers.SyncDatabase()
 	initializers.ConnectToRabbitmq()
+	// initializers.ConnectToRedis()
 }
 
 func main() {
@@ -34,10 +35,11 @@ func main() {
 			log.Printf("Failed to close RabbitMQ connection: %v", err)
 		}
 	}()
+	usersController := controllers.NewUsersController()
 
 	go startConsumers()
 
-	router.GET("/api/users", controllers.GetUsers)
+	router.GET("/api/users", usersController.GetUsers)
 
 	router.Run()
 }
