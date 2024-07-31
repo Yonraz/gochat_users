@@ -29,10 +29,11 @@ This service is responsible for managing user information, including storing use
 
 - Stores user information (username and status).
 - Supports CRUD operations when events occur (user registration, login, logout).
-- Consumes messages from RabbitMQ.
-- Uses PostgreSQL as the database.
+- Consumes messages from __RabbitMQ__.
+- Uses __PostgreSQL__ as the database.
 - Provides an endpoint to retrieve users with optional sorting parameters.
 - Supports pagination with query params.
+- Caches query results with __redis__ for optimized querying.
 
 ## Technologies
 
@@ -41,6 +42,7 @@ This service is responsible for managing user information, including storing use
 - GORM
 - RabbitMQ
 - PostgreSQL
+- Redis
 
 ## Installation
 
