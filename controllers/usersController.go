@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yonraz/gochat_users/cache"
@@ -21,6 +22,8 @@ var validDirections = map[string]bool{
     "desc": true,
 }
 
+var PAGE_SIZE = 20
+
 type UsersController struct {
 	cacheInstance *cache.Redis
 }
@@ -38,6 +41,14 @@ func NewUsersController() *UsersController {
 func (controller *UsersController) GetUsers(ctx *gin.Context) {
 	sort := ctx.DefaultQuery("sort", "status")
 	direction := ctx.DefaultQuery("direction", "desc")
+	pageQuery := ctx.DefaultQuery("page", "1")
+	page, queryErr := strconv.Atoi(pageQuery)
+	if queryErr != nil {
+		log.Println("page query invalid, defaulting to 1.")
+		pageQuery = "1"
+		page = 1
+	}
+	OFFSET := (page - 1) * PAGE_SIZE
 
 	if !validSortFields[sort] {
         ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid sort field"})
@@ -53,7 +64,9 @@ func (controller *UsersController) GetUsers(ctx *gin.Context) {
 	if sort == "online" {
 		sort = "status"
 	}
-	query := sort + direction
+
+	query := sort + direction + "page:" + pageQuery
+
 	var users []models.User
 	if state.DbCacheState.WasDBChanged() {
 		result, err := controller.cacheInstance.GetQuery(query)
@@ -67,7 +80,7 @@ func (controller *UsersController) GetUsers(ctx *gin.Context) {
 		}
 	}
 
-	if err := initializers.DB.Order(sort + " " + direction).Find(&users).Error; err != nil {
+	if err := initializers.DB.Offset(OFFSET).Limit(PAGE_SIZE).Order(sort + " " + direction).Find(&users).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to fetch users",
             "details": err.Error(),

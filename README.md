@@ -32,6 +32,7 @@ This service is responsible for managing user information, including storing use
 - Consumes messages from RabbitMQ.
 - Uses PostgreSQL as the database.
 - Provides an endpoint to retrieve users with optional sorting parameters.
+- Supports pagination with query params.
 
 ## Technologies
 
@@ -43,7 +44,7 @@ This service is responsible for managing user information, including storing use
 
 ## Installation
 
-_*This project is part of a super-module (gochat-app), it's intended to run as a microservice on a k8s cluster. these instructions are for local installation._
+_\*This project is part of a super-module (gochat-app), it's intended to run as a microservice on a k8s cluster. these instructions are for local installation._
 
 1. **Clone the repository:**
 
@@ -89,6 +90,9 @@ _*This project is part of a super-module (gochat-app), it's intended to run as a
 - **Query Parameters:**
   - `sort` (optional): Field to sort by (`status`, `username`). Default is `status`.
   - `direction` (optional): Sort direction (`asc`, `desc`). Default is `desc`.
+  - `page` (optional): Page to load, page size is currently fixed at 10. Default is 1.
+    - **notes:**
+      - must be a number between 1 and 1,000,000
 - **Response:**
 
   - `200 OK`: Returns a list of users.

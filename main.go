@@ -10,6 +10,7 @@ import (
 	"github.com/yonraz/gochat_users/controllers"
 	"github.com/yonraz/gochat_users/events/consumers"
 	"github.com/yonraz/gochat_users/initializers"
+	"github.com/yonraz/gochat_users/services"
 )
 
 func init () {
@@ -36,6 +37,10 @@ func main() {
 		}
 	}()
 	usersController := controllers.NewUsersController()
+
+	// dev - insert 35 lines of mock user data
+	services.CreateMockUsers()
+	//
 
 	go startConsumers()
 
