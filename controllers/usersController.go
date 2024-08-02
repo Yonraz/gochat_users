@@ -68,7 +68,7 @@ func (controller *UsersController) GetUsers(ctx *gin.Context) {
 	query := sort + direction + "page:" + pageQuery
 
 	var users []models.User
-	if state.DbCacheState.WasDBChanged() {
+	if !state.DbCacheState.WasDBChanged() {
 		result, err := controller.cacheInstance.GetQuery(query)
 		if err == nil && result != nil {
 			ctx.JSON(http.StatusOK, gin.H{

@@ -9,7 +9,7 @@ import "sync"
 
 type DatabaseCachingState struct {
 	isChanged bool
-	sync.Mutex
+	sync.RWMutex
 }
 
 var DbCacheState = NewCachingState()
@@ -25,7 +25,7 @@ func (state *DatabaseCachingState) SetIsChanged(value bool) {
 }
 
 func (state *DatabaseCachingState) WasDBChanged() bool {
-	state.Lock()
-	defer state.Unlock()
+	state.RLock()
+	defer state.RUnlock()
 	return state.isChanged
 }
