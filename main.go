@@ -20,7 +20,7 @@ func init () {
 	initializers.ConnectToDb()
 	initializers.SyncDatabase()
 	initializers.ConnectToRabbitmq()
-	// initializers.ConnectToRedis()
+	initializers.ConnectToRedis()
 }
 
 func main() {
