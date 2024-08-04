@@ -42,7 +42,7 @@ func NewClient() (*Redis, error) {
 	}, err
 }
 
-func (r *Redis) GetQuery(query string) ([]models.User, error) {
+func (r *Redis) GetQuery(query string) (*[]models.User, error) {
 	if !r.isConnected {
 		var err error = errors.New("redis is not connected") 
 		return nil, err
@@ -52,7 +52,7 @@ func (r *Redis) GetQuery(query string) ([]models.User, error) {
 		log.Printf("error retreiving query %v from redis: %v\n",query, err)
 		return nil, err
 	}
-	var users []models.User
+	var users *[]models.User
 	err = json.Unmarshal([]byte(data), &users)
 	if err != nil {
 		log.Printf("error unmarshalling data: %v\n", err)
@@ -62,7 +62,7 @@ func (r *Redis) GetQuery(query string) ([]models.User, error) {
 	return users, err
 }
 
-func (r *Redis) SetQuery(query string, users []models.User) error {
+func (r *Redis) SetQuery(query string, users *[]models.User) error {
 	if !r.isConnected {
 		return errors.New("redis is not connected")
 	}
