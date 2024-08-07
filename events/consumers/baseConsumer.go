@@ -45,7 +45,7 @@ func (c *Consumer) Consume() error {
 			if err := c.handlerFunc(msg); err != nil {
 				log.Printf("Failed to process message: %v", err)
 				// Handle nack or requeue logic if necessary
-				msg.Nack(false, true)
+				msg.Nack(false, false)
 			} else {
 				msg.Ack(false)
 			}
