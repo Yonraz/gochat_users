@@ -50,7 +50,7 @@ func main() {
 }
 
 func startConsumers() {
-	targetConsumers := []func(*amqp.Channel) *consumers.Consumer{
+	targetConsumers := []func(*amqp.Channel) *consumers.RmqConsumer{
 		consumers.NewUserRegisteredConsumer,
 		consumers.NewUserLoggedinConsumer,
 		consumers.NewUserSignedoutConsumer,
@@ -58,7 +58,7 @@ func startConsumers() {
 
 	for _, consumerFunc := range targetConsumers {
 		consumer := consumerFunc(initializers.RmqChannel)
-		go func(c *consumers.Consumer) {
+		go func(c *consumers.RmqConsumer) {
 			if err := c.Consume(); err != nil {
 				log.Fatalf("Error starting consumer: %v", err)
 			}

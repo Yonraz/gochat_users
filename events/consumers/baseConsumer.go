@@ -8,7 +8,7 @@ import (
 	"github.com/yonraz/gochat_users/constants"
 )
 
-type Consumer struct {
+type RmqConsumer struct {
 	channel *amqp.Channel
 	queueName string
 	routingKey string
@@ -16,8 +16,8 @@ type Consumer struct {
 	handlerFunc func(amqp.Delivery) error
 }
 
-func NewConsumer(channel *amqp.Channel, queueName constants.Queues, routingKey constants.RoutingKey, exchange constants.Exchange, handlerFunc func(amqp.Delivery) error) *Consumer {
-	return &Consumer{
+func NewConsumer(channel *amqp.Channel, queueName constants.Queues, routingKey constants.Topic, exchange constants.Exchange, handlerFunc func(amqp.Delivery) error) *RmqConsumer {
+	return &RmqConsumer{
 		channel:     channel,
 		queueName:   string(queueName),
 		routingKey:  string(routingKey),
@@ -26,7 +26,7 @@ func NewConsumer(channel *amqp.Channel, queueName constants.Queues, routingKey c
 	}
 }
 
-func (c *Consumer) Consume() error {
+func (c *RmqConsumer) Consume() error {
 	msgs, err := c.channel.Consume(
 		c.queueName,
 		"",
